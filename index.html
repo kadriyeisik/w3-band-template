@@ -1,161 +1,506 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>The Band</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W3Schools Band Template</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        /* Custom styles for slideshow text positioning */
+        .slideshow-text {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            /* Ensure text is readable over image */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+        /* Custom active class for navigation */
+        .nav-link.active {
+            background-color: #f1f1f1 !important; /* Original template uses light grey for active link */
+            color: #000 !important; /* Text color becomes black on active */
+        }
+        /* Custom styles for the search input animation */
+        .search-input-wrapper.hidden {
+            display: none;
+        }
+        .search-input-wrapper.show {
+            display: flex;
+            animation: fadeInDown 0.3s ease-out;
+        }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Custom style for search button active/focus state */
+        .search-btn-active {
+            background-color: #f44336; /* Red background for search button on active/focus */
+            color: #fff;
+        }
 
-  <!-- W3.CSS -->
-  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-  <!-- Google Fonts -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        /* Modal specific styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 100; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            align-items: center;
+            justify-content: center;
+        }
 
-  <style>
-    body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
-    .w3-bar,h1,button {font-family: "Montserrat", sans-serif}
-    .mySlides {display:none}
-    .more-info {
-      font-size: 18px;
-      margin-top: 24px;
-    }
-  </style>
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be adjusted with Tailwind max-w-lg */
+            max-width: 600px;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+            animation-name: animatetop;
+            animation-duration: 0.4s
+        }
+
+        /* Add Animation */
+        @keyframes animatetop {
+            from {top: -300px; opacity: 0}
+            to {top: 0; opacity: 1}
+        }
+
+        /* The Close Button */
+        .close-button {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
-<body>
-
+<body class="text-gray-800">
 <!-- Navbar -->
-<div class="w3-top">
-  <div class="w3-bar w3-red w3-card w3-left-align w3-large">
-    <a class="w3-bar-item w3-button w3-padding-large w3-white">Home</a>
-    <a href="#band" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Band</a>
-    <a href="#tour" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Tour</a>
-    <a href="#contact" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Contact</a>
-    <!-- Search Box -->
-    <div class="w3-bar-item w3-right w3-hide-small">
-      <input class="w3-input w3-bar-item" type="text" placeholder="Search..." style="margin-top:8px;">
-    </div>
-  </div>
-</div>
-
-<!-- Slideshow Header -->
-<header class="w3-display-container w3-center" id="home" style="margin-top:46px;">
-  <img class="mySlides" src="https://www.w3schools.com/w3images/la.jpg" style="width:100%">
-  <img class="mySlides" src="https://www.w3schools.com/w3images/ny.jpg" style="width:100%">
-  <img class="mySlides" src="https://www.w3schools.com/w3images/chicago.jpg" style="width:100%">
-  <div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
-    <h1 class="w3-xxxlarge">The Band</h1>
-    <p><b>We love music</b></p>
-  </div>
-</header>
-
-<script>
-  var slideIndex = 0;
-  carousel();
-  function carousel() {
-    var i;
-    var x = document.getElementsByClassName("mySlides");
-    for (i = 0; i < x.length; i++) {
-      x[i].style.display = "none";
-    }
-    slideIndex++;
-    if (slideIndex > x.length) {slideIndex = 1}
-    x[slideIndex-1].style.display = "block";
-    setTimeout(carousel, 4000); // 4 saniyede bir geçiş
-  }
-</script>
-
-<!-- Band Section -->
-<div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
-  <h2 class="w3-wide">THE BAND</h2>
-  <p class="w3-opacity"><i>We love music</i></p>
-  <p class="w3-justify">
-    We have created a fictional band website. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-  </p>
-  <button onclick="document.getElementById('moreText').style.display='block'" class="w3-button w3-black w3-margin-top">More</button>
-  <div id="moreText" class="w3-justify w3-padding more-info" style="display:none;">
-    More details about the band: The band was formed in 2020 and has performed in over 50 cities worldwide. Their genre blends rock, jazz, and soul.
-  </div>
-</div>
-
-<!-- Tour Section -->
-<div class="w3-black" id="tour">
-  <div class="w3-container w3-content w3-padding-64" style="max-width:800px">
-    <h2 class="w3-wide w3-center">TOUR DATES</h2>
-    <p class="w3-opacity w3-center"><i>Remember to book your tickets!</i></p><br>
-
-    <ul class="w3-ul w3-border w3-white w3-text-grey">
-      <li class="w3-padding">September <span class="w3-tag w3-red w3-margin-left">Sold out</span></li>
-      <li class="w3-padding">October <span class="w3-tag w3-red w3-margin-left">Sold out</span></li>
-      <li class="w3-padding">November <span class="w3-badge w3-right w3-margin-right">3</span></li>
+<nav class="w-full bg-black text-white py-4 fixed top-0 left-0 z-50 shadow-md">
+  <div class="container mx-auto flex items-center justify-between px-4 lg:px-8">
+    <!-- Desktop Nav Links -->
+    <ul class="hidden lg:flex space-x-6 text-sm uppercase font-semibold items-center">
+      <!-- Nav links with hover and active states -->
+      <li><a href="#home" class="nav-link hover:bg-gray-200 hover:text-black py-2 px-3 rounded-md transition-colors duration-200">Home</a></li>
+      <li><a href="#band" class="nav-link hover:bg-gray-200 hover:text-black py-2 px-3 rounded-md transition-colors duration-200">Band</a></li>
+      <li><a href="#tour" class="nav-link hover:bg-gray-200 hover:text-black py-2 px-3 rounded-md transition-colors duration-200">Tour</a></li>
+      <li><a href="#contact" class="nav-link hover:bg-gray-200 hover:text-black py-2 px-3 rounded-md transition-colors duration-200">Contact</a></li>
+      <li class="relative group">
+        <button id="more-dropdown-btn"
+          class="nav-link hover:bg-gray-200 hover:text-black px-3 rounded-md transition-colors duration-200 inline-flex items-center h-[40px] leading-none">
+          MORE <i class="fas fa-caret-down ml-1"></i>
+        </button>
+        <!-- More Dropdown Menu -->
+        <div id="more-dropdown"
+          class="absolute left-0 mt-2 w-48 bg-white text-black shadow-lg rounded-md hidden group-hover:block transition-all duration-300 overflow-hidden">
+          <a href="#" class="block px-4 py-2 hover:bg-gray-200">Merchandise</a>
+          <a href="#" class="block px-4 py-2 hover:bg-gray-200">Media</a>
+          <a href="#" class="block px-4 py-2 hover:bg-gray-200">Extras</a>
+        </div>
+      </li>
     </ul>
 
-    <div class="w3-row-padding w3-padding-32" style="margin:0 -16px">
-      <div class="w3-third w3-margin-bottom">
-        <img src="https://www.w3schools.com/w3images/newyork.jpg" style="width:100%" class="w3-hover-opacity">
-        <div class="w3-container w3-white">
-          <p><b>New York</b></p>
-          <p class="w3-opacity">Fri 27 Nov 2025</p>
-          <p><button class="w3-button w3-black w3-margin-bottom">Buy Tickets</button></p>
-        </div>
-      </div>
-      <div class="w3-third w3-margin-bottom">
-        <img src="https://www.w3schools.com/w3images/paris.jpg" style="width:100%" class="w3-hover-opacity">
-        <div class="w3-container w3-white">
-          <p><b>Paris</b></p>
-          <p class="w3-opacity">Sat 28 Nov 2025</p>
-          <p><button class="w3-button w3-black w3-margin-bottom">Buy Tickets</button></p>
-        </div>
-      </div>
-      <div class="w3-third w3-margin-bottom">
-        <img src="https://www.w3schools.com/w3images/sanfran.jpg" style="width:100%" class="w3-hover-opacity">
-        <div class="w3-container w3-white">
-          <p><b>San Francisco</b></p>
-          <p class="w3-opacity">Sun 29 Nov 2025</p>
-          <p><button class="w3-button w3-black w3-margin-bottom">Buy Tickets</button></p>
-        </div>
-      </div>
+    <!-- Search and Mobile Menu Icons -->
+    <div class="flex items-center space-x-4 ml-auto">
+      <!-- Search Icon -->
+      <button id="search-toggle-btn"
+        class="text-white text-lg lg:py-2 lg:px-3 focus:outline-none transition-colors duration-200">
+        <i class="fas fa-search"></i>
+      </button>
+      <!-- Mobile Menu Icon (Hamburger) -->
+      <button id="mobile-menu-btn"
+        class="text-white text-lg lg:hidden hover:text-gray-400 focus:outline-none">
+        <i class="fas fa-bars"></i>
+      </button>
     </div>
   </div>
-</div>
 
-<!-- Contact Section -->
-<div class="w3-container w3-content w3-padding-64" style="max-width:800px" id="contact">
-  <h2 class="w3-wide w3-center">CONTACT</h2>
-  <p class="w3-opacity w3-center"><i>Fan? Drop a note!</i></p>
-
-  <div class="w3-row w3-padding-32">
-    <div class="w3-col m6 w3-large w3-margin-bottom">
-      <i class="fa fa-map-marker" style="width:30px"></i> Chicago, US<br>
-      <i class="fa fa-phone" style="width:30px"></i> Phone: +00 151515<br>
-      <i class="fa fa-envelope" style="width:30px"> </i> Email: mail@mail.com<br>
-    </div>
-    <div class="w3-col m6">
-      <form action="/action_page.php" target="_blank">
-        <div class="w3-row-padding" style="margin:0 -16px 8px -16px">
-          <div class="w3-half">
-            <input class="w3-input w3-border" type="text" placeholder="Name" required name="Name">
-          </div>
-          <div class="w3-half">
-            <input class="w3-input w3-border" type="text" placeholder="Email" required name="Email">
-          </div>
-        </div>
-        <input class="w3-input w3-border" type="text" placeholder="Message" required name="Message">
-        <button class="w3-button w3-black w3-section w3-right" type="submit">SEND</button>
-      </form>
-    </div>
+  <!-- Search Input (Initially hidden) -->
+  <div id="search-input-wrapper"
+    class="search-input-wrapper hidden w-full px-4 py-2 bg-gray-900 justify-center items-center">
+    <input type="text" placeholder="Search..."
+      class="w-full max-w-md p-2 rounded-md bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
   </div>
-</div>
 
-<!-- Map / Image -->
-<img src="https://www.w3schools.com/w3images/map.jpg" class="w3-image w3-greyscale-min" style="width:100%">
+  <!-- Mobile Menu (Initially hidden) -->
+  <div id="mobile-menu" class="lg:hidden bg-black py-2 hidden">
+    <ul class="flex flex-col text-sm uppercase font-semibold">
+      <li><a href="#home" class="nav-link block py-2 px-4 hover:bg-gray-200 hover:text-black">Home</a></li>
+      <li><a href="#band" class="nav-link block py-2 px-4 hover:bg-gray-200 hover:text-black">Band</a></li>
+      <li><a href="#tour" class="nav-link block py-2 px-4 hover:bg-gray-200 hover:text-black">Tour</a></li>
+      <li><a href="#contact" class="nav-link block py-2 px-4 hover:bg-gray-200 hover:text-black">Contact</a></li>
+      <li class="relative">
+        <button id="mobile-more-btn"
+          class="block py-2 px-4 hover:bg-gray-200 hover:text-black w-full text-left flex items-center justify-between">
+          MORE <i class="fas fa-caret-down ml-1"></i>
+        </button>
+        <div id="mobile-more-dropdown" class="bg-gray-800 text-white hidden">
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Merchandise</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Media</a>
+          <a href="#" class="block px-6 py-2 hover:bg-gray-700">Extras</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
 
-<!-- Footer -->
-<footer class="w3-container w3-padding-64 w3-center w3-opacity">
-  <p>Made with 💖 by Kadriye</p>
-</footer>
+    <!-- Slideshow Section -->
+    <!-- Updated height to dynamically fill the screen below the navbar and added a minimum height -->
+    <section id="home" class="relative w-full h-[calc(100vh-72px)] min-h-[500px] mt-[72px] overflow-hidden">
+        <!-- Slideshow images with text overlay -->
+        <div class="absolute inset-0 transition-opacity duration-1000 ease-in-out" style="background-image: url('https://www.w3schools.com/w3css/img_la.jpg'); background-size: cover; background-position: center;">
+            <div class="absolute slideshow-text text-white text-center w-full px-4 py-8">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-2">LA</h2>
+                <p class="text-lg sm:text-xl hidden sm:block">Thank you, Chicago - A night we won't forget.</p>
+            </div>
+        </div>
+        <div class="absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0" style="background-image: url('https://www.w3schools.com/w3css/img_ny.jpg'); background-size: cover; background-position: center;">
+            <div class="absolute slideshow-text text-white text-center w-full px-4 py-8">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-2">New York</h2>
+                <p class="text-lg sm:text-xl hidden sm:block">The atmosphere in New York is awesome.</p>
+            </div>
+        </div>
+        <div class="absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0" style="background-image: url('https://www.w3schools.com/w3css/img_chicago.jpg'); background-size: cover; background-position: center;">
+            <div class="absolute slideshow-text text-white text-center w-full px-4 py-8">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-2">Chicago</h2>
+                <p class="text-lg sm:text-xl hidden sm:block">Thank you, Chicago - A night we won't forget.</p>
+            </div>
+        </div>
+    </section>
 
+    <!-- The Band Section -->
+    <section id="band" class="container mx-auto px-4 py-16 text-center">
+        <h2 class="text-4xl font-light mb-4 tracking-wider">THE BAND</h2>
+        <p class="italic text-lg mb-8">We love music</p>
+        <p class="text-gray-700 leading-relaxed max-w-3xl mx-auto mb-12">
+            We have been The Band since 2012. We are a music group composed of three passionate musicians. Our journey began with a shared love for creating unique sounds and performing live. Over the years, we've honed our craft, blending various genres to deliver an electrifying experience to our audience. We are dedicated to bringing joy and excitement through our music, and we constantly strive to push our creative boundaries.
+            Our fans are at the heart of everything we do, and we're grateful for their unwavering support. We look forward to seeing you at our next show!
+        </p>
+
+        <!-- Updated: Ensured images are always side-by-side using w-1/3 on all screen sizes -->
+        <!-- Removed flex-wrap and gap-8 from parent, used justify-around for even spacing -->
+        <div class="flex justify-around items-start">
+            <div class="w-1/3 flex flex-col items-center p-2">
+                <p class="mb-4 text-xl font-semibold">Name</p>
+                <img src="https://www.w3schools.com/w3css/img_bandmember.jpg" alt="Band Member" class="w-32 h-32 rounded-lg object-cover shadow-md mb-4">
+            </div>
+            <div class="w-1/3 flex flex-col items-center p-2">
+                <p class="mb-4 text-xl font-semibold">Name</p>
+                <img src="https://www.w3schools.com/w3css/img_bandmember.jpg" alt="Band Member" class="w-32 h-32 rounded-lg object-cover shadow-md mb-4">
+            </div>
+            <div class="w-1/3 flex flex-col items-center p-2">
+                <p class="mb-4 text-xl font-semibold">Name</p>
+                <img src="https://www.w3schools.com/w3css/img_bandmember.jpg" alt="Band Member" class="w-32 h-32 rounded-lg object-cover shadow-md mb-4">
+            </div>
+        </div>
+    </section>
+
+    <!-- Tour Dates Section -->
+    <section id="tour" class="bg-gray-900 text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-light mb-4 tracking-wider">TOUR DATES</h2>
+            <p class="italic text-lg mb-8">Remember to book your tickets!</p>
+
+            <div class="bg-white text-gray-800 rounded-lg shadow-lg overflow-hidden max-w-3xl mx-auto mb-8">
+                <ul class="divide-y divide-gray-200">
+                    <li class="flex justify-between items-center py-3 px-6">
+                        <span class="font-semibold">September</span>
+                        <span class="bg-red-600 text-white text-xs px-2 py-1 rounded-sm">Sold out</span>
+                    </li>
+                    <li class="flex justify-between items-center py-3 px-6">
+                        <span class="font-semibold">October</span>
+                        <span class="bg-red-600 text-white text-xs px-2 py-1 rounded-sm">Sold out</span>
+                    </li>
+                    <li class="flex justify-between items-center py-3 px-6">
+                        <span class="font-semibold">November</span>
+                        <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full">3</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+                <!-- New York Concert -->
+                <div class="bg-white text-gray-800 rounded-lg shadow-lg overflow-hidden">
+                    <img src="https://www.w3schools.com/w3css/img_newyork.jpg" alt="New York Concert" class="w-full h-48 object-cover">
+                    <div class="p-6 text-left">
+                        <h3 class="text-xl font-semibold mb-2">New York</h3>
+                        <p class="text-gray-600 text-sm mb-2"><i class="far fa-calendar-alt mr-2"></i>Fri 27 Nov 2024</p>
+                        <p class="text-gray-700 mb-4">An unforgettable night for rock music fans.</p>
+                        <button type="button" class="buy-tickets-btn bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors duration-200 w-full text-center">Buy Tickets</button>
+                    </div>
+                </div>
+                <!-- Paris Concert -->
+                <div class="bg-white text-gray-800 rounded-lg shadow-lg overflow-hidden">
+                    <img src="https://www.w3schools.com/w3css/img_paris.jpg" alt="Paris Concert" class="w-full h-48 object-cover">
+                    <div class="p-6 text-left">
+                        <h3 class="text-xl font-semibold mb-2">Paris</h3>
+                        <p class="text-gray-600 text-sm mb-2"><i class="far fa-calendar-alt mr-2"></i>Sat 28 Nov 2024</p>
+                        <p class="text-gray-700 mb-4">Live performance in the city of lovers, Paris.</p>
+                        <button type="button" class="buy-tickets-btn bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors duration-200 w-full text-center">Buy Tickets</button>
+                    </div>
+                </div>
+                <!-- San Francisco Concert -->
+                <div class="bg-white text-gray-800 rounded-lg shadow-lg overflow-hidden">
+                    <img src="https://www.w3schools.com/w3css/img_sanfran.jpg" alt="San Francisco Concert" class="w-full h-48 object-cover">
+                    <div class="p-6 text-left">
+                        <h3 class="text-xl font-semibold mb-2">San Francisco</h3>
+                        <p class="text-gray-600 text-sm mb-2"><i class="far fa-calendar-alt mr-2"></i>Sun 29 Nov 2024</p>
+                        <p class="text-gray-700 mb-4">A musical feast in the shadow of the Golden Gate.</p>
+                        <button type="button" class="buy-tickets-btn bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors duration-200 w-full text-center">Buy Tickets</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="container mx-auto px-4 py-16 text-center">
+        <h2 class="text-4xl font-light mb-4 tracking-wider">CONTACT</h2>
+        <p class="italic text-lg mb-8">Fan? Drop a message.</p>
+
+        <div class="max-w-xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+            <div class="space-y-4">
+                <p><i class="fas fa-map-marker-alt fa-fw mr-3"></i>Chicago, US</p>
+                <p><i class="fas fa-phone fa-fw mr-3"></i>Phone: +00 151515</p>
+                <p><i class="fas fa-envelope fa-fw mr-3"></i>Email: mail@mail.com</p>
+            </div>
+            <form class="space-y-4">
+                <input type="text" placeholder="Name" required class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="email" placeholder="Email" required class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" placeholder="Message" required class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button type="submit" class="bg-black text-white px-6 py-2 rounded-md hover:bg-gray-800 transition-colors duration-200 float-right">SEND</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer Image (Map) -->
+    <div class="w-full">
+        <img src="https://www.w3schools.com/w3images/map.jpg" alt="Map of Chicago, US" class="w-full h-auto object-cover">
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 text-center">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center space-x-6 text-2xl mb-4">
+                <a href="#" class="hover:text-gray-400"><i class="fab fa-facebook-square"></i></a>
+                <a href="#" class="hover:text-gray-400"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="hover:text-gray-400"><i class="fab fa-snapchat-ghost"></i></a>
+                <a href="#" class="hover:text-gray-400"><i class="fab fa-pinterest-p"></i></a>
+                <a href="#" class="hover:text-gray-400"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="hover:text-gray-400"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <p class="text-gray-400 text-sm">
+                Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank" class="text-blue-400 hover:underline">w3.css</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Ticket Modal -->
+    <div id="ticket-modal" class="modal">
+        <div class="modal-content relative bg-white p-8 rounded-lg shadow-xl w-11/12 max-w-lg">
+            <button class="close-button absolute top-2 right-4 text-gray-500 hover:text-gray-800 text-3xl font-bold cursor-pointer" title="Close Modal">&times;</button>
+            <h2 class="text-3xl font-light mb-6 text-center">Tickets <i class="fa fa-suitcase ml-2"></i></h2>
+
+            <form class="space-y-4">
+                <p><label for="how_many" class="block text-lg font-medium text-gray-700 mb-1"><i class="fa fa-shopping-cart mr-2"></i> How Many?</label>
+                <input type="number" id="how_many" placeholder="Type a number" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"></p>
+
+                <p><label for="send_to" class="block text-lg font-medium text-gray-700 mb-1"><i class="fa fa-user mr-2"></i> Send To</label>
+                <input type="email" id="send_to" placeholder="Enter email" required class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"></p>
+
+                <button type="submit" class="bg-green-500 text-white px-6 py-3 rounded-md hover:bg-green-600 transition-colors duration-200 w-full text-lg font-semibold mt-6">PAY <i class="fa fa-check ml-2"></i></button>
+                <p class="text-red-500 text-sm mt-4 text-left">Need <a href="#" class="underline hover:text-red-700">help?</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMoreBtn = document.getElementById('mobile-more-btn');
+            const mobileMoreDropdown = document.getElementById('mobile-more-dropdown');
+            const searchToggleButton = document.getElementById('search-toggle-btn');
+            const searchInputWrapper = document.getElementById('search-input-wrapper');
+            const slideshowImages = document.querySelectorAll('#home > div');
+            const navLinks = document.querySelectorAll('.nav-link'); // All nav links, including 'MORE' button
+
+            const buyTicketsButtons = document.querySelectorAll('.buy-tickets-btn'); // Get all buy tickets buttons
+            const ticketModal = document.getElementById('ticket-modal'); // Get the modal
+            const closeButton = ticketModal.querySelector('.close-button'); // Get the close button inside modal
+
+            let currentSlide = 0;
+
+            // Function to show a specific slide
+            const showSlide = (index) => {
+                slideshowImages.forEach((img, i) => {
+                    if (i === index) {
+                        img.style.opacity = '1';
+                        img.style.zIndex = '1'; // Bring to front
+                    } else {
+                        img.style.opacity = '0';
+                        img.style.zIndex = '0'; // Send to back
+                    }
+                });
+            };
+
+            // Automatic slideshow transition
+            const startSlideshow = () => {
+                setInterval(() => {
+                    currentSlide = (currentSlide + 1) % slideshowImages.length;
+                    showSlide(currentSlide);
+                }, 4000); // Change image every 4 seconds
+            };
+
+            // Initial slide display
+            showSlide(currentSlide);
+            startSlideshow();
+
+            // Mobile menu toggle
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Mobile "More" dropdown toggle
+            mobileMoreBtn.addEventListener('click', () => {
+                mobileMoreDropdown.classList.toggle('hidden');
+            });
+
+            // Search input toggle and button style change
+            searchToggleButton.addEventListener('click', () => {
+                searchInputWrapper.classList.toggle('hidden');
+                searchInputWrapper.classList.toggle('show');
+
+                // Toggle search button background color
+                searchToggleButton.classList.toggle('search-btn-active');
+            });
+
+            // Smooth scrolling for navigation links and active state
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const href = link.getAttribute('href');
+                    // Check if it's a section link, not a merchandise/media/extras link
+                    if (href && href.startsWith('#')) {
+                        e.preventDefault();
+                        const targetId = href.substring(1);
+                        const targetElement = document.getElementById(targetId);
+                        if (targetElement) {
+                            // Adjust scroll position to account for fixed header
+                            const headerOffset = 72; // Height of the fixed header
+                            const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                            const offsetPosition = elementPosition - headerOffset;
+
+                            window.scrollTo({
+                                top: offsetPosition,
+                                behavior: "smooth"
+                            });
+
+                            // Close mobile menu after clicking a link
+                            if (!mobileMenu.classList.contains('hidden')) {
+                                mobileMenu.classList.add('hidden');
+                            }
+                            // Hide mobile more dropdown if open
+                            if (!mobileMoreDropdown.classList.contains('hidden')) {
+                                mobileMoreDropdown.classList.add('hidden');
+                            }
+                        }
+                    }
+
+                    // Remove active from all nav links
+                    navLinks.forEach(navLink => {
+                        navLink.classList.remove('active');
+                    });
+                    // Add active to the clicked link
+                    link.classList.add('active');
+                });
+            });
+
+            // Set active class for nav links on scroll
+            const sections = document.querySelectorAll('section[id], div[id="home"]'); // Get all sections with an id
+            const highlightNavLink = () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 80; // Adjust for header height
+                    const sectionHeight = section.clientHeight;
+                    if (pageYOffset >= sectionTop && pageYOffset < sectionTop + sectionHeight) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    // Make sure it's a primary nav link, not a dropdown item
+                    if (link.getAttribute('href') && link.getAttribute('href').startsWith('#')) {
+                         link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${current}`) {
+                            link.classList.add('active');
+                        }
+                    }
+                });
+
+                // The original W3Schools template doesn't seem to make 'MORE' active on scroll,
+                // only on hover/click. So we'll maintain that behavior.
+            };
+
+            window.addEventListener('scroll', highlightNavLink);
+            highlightNavLink(); // Call on load to set initial active link
+
+            // --- Modal JavaScript ---
+
+            // Open the modal when any "Buy Tickets" button is clicked
+            buyTicketsButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    ticketModal.style.display = 'flex'; // Use flex to center
+                });
+            });
+
+            // Close the modal when the close button is clicked
+            closeButton.addEventListener('click', () => {
+                ticketModal.style.display = 'none';
+            });
+
+            // Close the modal when clicking outside the modal content
+            ticketModal.addEventListener('click', (event) => {
+                if (event.target === ticketModal) {
+                    ticketModal.style.display = 'none';
+                }
+            });
+
+            // Close the modal when the Escape key is pressed
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' || event.key === 'Esc') {
+                    if (ticketModal.style.display === 'flex') {
+                        ticketModal.style.display = 'none';
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>
